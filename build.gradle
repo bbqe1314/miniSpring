@@ -11,10 +11,10 @@ version '1.0'
 sourceCompatibility = 1.8
 
 repositories {
-    maven {
-        url 'http://maven.aliyun.com/nexus/content/groups/public/'
-    }
-    // mavenCentral()
+//    maven {
+//        url 'http://maven.aliyun.com/nexus/content/groups/public/'
+//    }
+     mavenCentral()
 }
 tasks.withType(JavaCompile) {
     options.encoding = "UTF-8"
@@ -49,23 +49,23 @@ uploadArchives {
             }
 
             repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
-                authentication(userName: 'zty', password: 'Bbqe20160212;')
+                authentication(userName: '1583111727@qq.com', password: 'Bbqe20160212;')
             }
 
             snapshotRepository(url: "https://oss.sonatype.org/content/repositories/snapshots/") {
-                authentication(userName: 'zty', password: 'Bbqe20160212;')
+                authentication(userName: '1583111727@qq.com', password: 'Bbqe20160212;')
             }
 
             pom.project {
                 name 'miniSpring'
                 packaging 'aar'
                 description 'Mini spring is for better development of simple programs. Instead of referencing other things that spring doesn\'t use. It retains some of spring\'s common features.'
-                url 'https://github.com/bbqe1314/mini-spring'
+                url 'https://github.com/bbqe1314/miniSpring'
 
                 scm {
                     connection 'scm:git:https://github.com/bbqe1314/miniSpring.git'
                     developerConnection 'scm:git:https://github.com/bbqe1314/miniSpring.git'
-                    url 'https://github.com/bbqe1314/mini-spring.git'
+                    url 'https://github.com/bbqe1314/miniSpring.git'
                 }
 
                 licenses {
