@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration>
+    <Appenders>
+        <Console name="Console" target="SYSTEM_OUT">
+            <PatternLayout pattern="%d{yy-MM-dd HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
+        </Console>
+    </Appenders>
+    <Loggers>
+        <logger name="org.dreamtech.zty" level="debug"/>
+        <root level="debug">
+            <AppenderRef ref="Console"/>
+        </root>
+    </Loggers>
+</Configuration>
+

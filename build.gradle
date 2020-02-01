@@ -1,0 +1,88 @@
+plugins {
+    id 'java'
+    id 'maven'
+    id 'signing'
+}
+
+group 'com.dreamtech'
+archivesBaseName = 'miniSpring'
+version '1.0'
+
+sourceCompatibility = 1.8
+
+repositories {
+    maven {
+        url 'http://maven.aliyun.com/nexus/content/groups/public/'
+    }
+    // mavenCentral()
+}
+tasks.withType(JavaCompile) {
+    options.encoding = "UTF-8"
+    options.compilerArgs << "-parameters"
+}
+
+dependencies {
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+    compile group: 'org.apache.tomcat.embed', name: 'tomcat-embed-core', version: '8.5.23'
+    compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.4'
+    compile group: 'mysql', name: 'mysql-connector-java', version: '8.0.17'
+    compile group: 'com.aliyun.oss', name: 'aliyun-sdk-oss', version: '3.8.1'
+    compile group: 'com.alibaba', name: 'fastjson', version: '1.2.62'
+    compile group: 'org.apache.tika', name: 'tika-core', version: '1.23'
+    compile group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.11.1'
+    compile group: 'org.apache.logging.log4j', name: 'log4j-api', version: '2.11.1'
+}
+
+jar {
+    from {
+        configurations.compile.collect {
+            it.isDirectory() ? it : zipTree(it)
+        }
+    }
+}
+
+uploadArchives {
+    repositories {
+        mavenDeployer {
+            beforeDeployment {
+                MavenDeployment deployment -> signing.signPom(deployment)
+            }
+
+            repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
+                authentication(userName: 'zty', password: 'Bbqe20160212;')
+            }
+
+            snapshotRepository(url: "https://oss.sonatype.org/content/repositories/snapshots/") {
+                authentication(userName: 'zty', password: 'Bbqe20160212;')
+            }
+
+            pom.project {
+                name 'miniSpring'
+                packaging 'aar'
+                description 'Mini spring is for better development of simple programs. Instead of referencing other things that spring doesn\'t use. It retains some of spring\'s common features.'
+                url 'https://github.com/bbqe1314/mini-spring'
+
+                scm {
+                    connection 'scm:git:https://github.com/bbqe1314/miniSpring.git'
+                    developerConnection 'scm:git:https://github.com/bbqe1314/miniSpring.git'
+                    url 'https://github.com/bbqe1314/mini-spring.git'
+                }
+
+                licenses {
+                    license {
+                        name 'The Apache License, Version 2.0'
+                        url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                    }
+                }
+
+                developers {
+                    developer {
+                        id 'dreamtech'
+                        name 'zty'
+                        email '1583111727@qq.com'
+                    }
+                }
+            }
+        }
+    }
+}
