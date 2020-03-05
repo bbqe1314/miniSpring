@@ -42,15 +42,12 @@ public class MiniApplication {
      * 启动
      */
     public static void run(Class<?> cls, String[] args) {
-
-        String packageName = cls.getPackage().getName();
-
-        new MiniApplication().run(packageName, args);
+        new MiniApplication().run(cls);
     }
 
-    private void run(String packageName, String[] args) {
+    private void run(Class<?> cls) {
         //初始化
-        init(packageName);
+        init(cls);
         //通知prepare Listener
         miniSpringPrepare();
         //通知start Listener
@@ -59,10 +56,10 @@ public class MiniApplication {
         checkException();
     }
 
-    private void init(String packageName) {
+    private void init(Class<?> cls) {
         initLog();//初始化日志（屏蔽tomcat输出）
         initArgs();//初始化参数（获取在application.properties中设置的）
-        initClassList(packageName);//初始化类列表
+        initClassList(cls);//初始化类列表
         initBeans();//初始化bean
         initComponent();//初始化组件
         initEventMulticaster();//初始化广播器
@@ -82,9 +79,9 @@ public class MiniApplication {
         ApplicationContext.getInstance().setAppArgs(args);
     }
 
-    private void initClassList(String packageName) {
+    private void initClassList(Class<?> cls) {
         try {
-            ApplicationContext.getInstance().scanClasses(packageName);
+            ApplicationContext.getInstance().scanClasses(cls);
         } catch (Exception e) {
             MINIExceptionProcessor.getInstance().putException("scan classList error", e);
         }

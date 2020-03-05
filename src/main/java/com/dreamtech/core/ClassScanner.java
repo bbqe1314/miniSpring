@@ -12,9 +12,15 @@ import java.util.jar.JarFile;
  * 类扫描器
  */
 public class ClassScanner {
-    public static synchronized List<Class<?>> scanClasses(String packageName) throws Exception {
-        String classPath = Objects.requireNonNull(Thread.currentThread().getContextClassLoader().getResource("")).getPath() + "/" + packageName.replace(".", "/");
-        return getClassFromDir(packageName, classPath);
+    public static synchronized List<Class<?>> scanClasses(Class<?> cls) throws Exception {
+        String packageName = cls.getPackage().getName();
+        String mainJarPath = cls.getProtectionDomain().getCodeSource().getLocation().getPath();
+        String classPath = mainJarPath + "/" + packageName.replace(".", "/");
+        if (classPath.contains(".jar")) {
+            return getClassesFromJar(mainJarPath, packageName.replace(".", "/"));
+        } else {
+            return getClassFromDir(packageName, classPath);
+        }
     }
 
     /**
@@ -45,7 +51,7 @@ public class ClassScanner {
 
     public static synchronized List<Class<?>> scanClasses() throws IOException, ClassNotFoundException {
         List<Class<?>> classList = new ArrayList<>();
-        String path = "org/dreamtech/zty";
+        String path = "com/dreamtech";
         ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
         Enumeration<URL> resources = classLoader.getResources(path);
         while (resources.hasMoreElements()) {
@@ -63,7 +69,7 @@ public class ClassScanner {
      * 从jar包中获取类列表
      *
      * @param jarFilePath jar路径
-     * @param path        org/dreamtech/zty
+     * @param path        com/dreamtech
      * @return 类列表
      * @throws IOException            IO
      * @throws ClassNotFoundException ClassNotFound

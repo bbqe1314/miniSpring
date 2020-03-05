@@ -30,9 +30,13 @@ public class ApplicationContext {
     /**
      * 扫描类列表
      */
-    public synchronized void scanClasses(String packageName) throws Exception {
-        List<Class<?>> classList = ClassScanner.scanClasses(packageName);
-        classList.addAll(ClassScanner.scanClasses());
+    public synchronized void scanClasses(Class<?> cls) throws Exception {
+        List<Class<?>> classList = ClassScanner.scanClasses(cls);
+        if (classList == null)
+            classList = ClassScanner.scanClasses();
+        else {
+            classList.addAll(ClassScanner.scanClasses());
+        }
         this.classList = classList;
     }
 
